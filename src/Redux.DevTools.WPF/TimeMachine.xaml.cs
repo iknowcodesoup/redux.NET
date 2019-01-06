@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Redux.Reactive;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -65,7 +63,7 @@ namespace Redux.DevTools.WPF
             {
                 var currentAction = state.Actions[state.Position - 1];
                 CurrentActionTypeTextBlock.Text = currentAction.GetType().Name;
-                CurrentActionDescription.Text = JsonConvert.SerializeObject(currentAction, Formatting.Indented);
+                CurrentActionDescription.Text = Serialization.SerializeObject(currentAction, Formatting.Indented);
             }
         }
 

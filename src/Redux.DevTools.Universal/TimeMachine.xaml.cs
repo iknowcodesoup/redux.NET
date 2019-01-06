@@ -1,9 +1,8 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Newtonsoft.Json;
-using System;
 using Redux.Reactive;
+using System;
 
 namespace Redux.DevTools.Universal
 {
