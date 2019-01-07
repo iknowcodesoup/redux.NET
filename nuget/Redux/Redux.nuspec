@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Reactive-Redux.NET</id>
+    <version>3.0.0</version>
+    <authors>Jeff Holcombe</authors>
+    <owners>Jeff Holcombe</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/iknowcodesoup/redux.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Reactive-Redux.NET is a predictable state container for .NET apps. Modified from https://github.com/GuillaumeSalles/redux.NET</description>
+    <releaseNotes>Included extensions for AsyncThunks and state property refactor</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>Redux</tags>
+    <dependencies>
+	  <dependency id="System.Reactive" version="3.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="..\..\src\Redux\bin\release\netstandard1.1\Redux.dll" target="lib\netstandard1.1" />
+  </files>
+</package>

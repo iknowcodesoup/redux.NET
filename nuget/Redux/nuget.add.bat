@@ -1,0 +1,1 @@
+nuget add Reactive-Redux.NET.3.0.0.nupkg -source c:\nuget\repo

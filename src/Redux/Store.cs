@@ -16,10 +16,9 @@
     private readonly object _syncRoot = new object();
     private readonly Dispatcher _dispatcher;
     private readonly Reducer<TState> _reducer;
-    public TState _lastState;
     private Action _stateChanged;
 
-    public TState CurrentState => _lastState;
+    public TState CurrentState { get; private set; }
 
     public Store(
       Reducer<TState> reducer,
@@ -28,7 +27,7 @@
     {
       _reducer = reducer;
       _dispatcher = ApplyMiddlewares(middlewares);
-      _lastState = initialState;
+      CurrentState = initialState;
     }
 
     public event Action StateChanged
@@ -62,7 +61,7 @@
     {
       lock (_syncRoot)
       {
-        _lastState = _reducer(_lastState, action);
+        CurrentState = _reducer(CurrentState, action);
       }
 
       _stateChanged?.Invoke();
