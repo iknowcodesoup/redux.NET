@@ -9,6 +9,8 @@
     TState CurrentState { get; }
 
     event Action StateChanged;
+
+    object InnerDispatch(object action);
   }
 
   public class Store<TState> : IStore<TState>
@@ -45,7 +47,7 @@
       return _dispatcher(action);
     }
 
-    private Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
+    public Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
     {
       Dispatcher dispatcher = InnerDispatch;
 
@@ -57,7 +59,7 @@
       return dispatcher;
     }
 
-    private object InnerDispatch(object action)
+    public object InnerDispatch(object action)
     {
       lock (_syncRoot)
       {

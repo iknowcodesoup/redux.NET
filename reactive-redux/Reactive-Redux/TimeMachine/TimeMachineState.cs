@@ -12,7 +12,6 @@ namespace Redux.TimeMachine
 
         public bool IsPaused { get; private set; }
 
-
         public TimeMachineState()
         {
             Actions = ImmutableList<object>.Empty;
