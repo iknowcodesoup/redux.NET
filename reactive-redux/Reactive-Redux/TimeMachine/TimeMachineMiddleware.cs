@@ -16,9 +16,11 @@
         {
           var result = next(action);
 
-          timeMachineState = TimeMachineReducer.Execute(timeMachineState, result, action);
-
-          result = timeMachineState.States[timeMachineState.Position];
+          if (action.GetType().BaseType == typeof(TimeMachineActions))
+          {
+            timeMachineState = TimeMachineReducer.Execute(timeMachineState, result, action);
+            result = timeMachineState.States[timeMachineState.Position];
+          }
 
           return result;
         };

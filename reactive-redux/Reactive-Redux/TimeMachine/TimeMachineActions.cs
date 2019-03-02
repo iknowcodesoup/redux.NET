@@ -13,15 +13,15 @@
     public class ClearAction
     {
     }
-  }
 
-  public class PauseTimeMachineAction
-  {
+    public class PauseTimeMachineAction
+    {
 
-  }
+    }
 
-  public class SetTimeMachinePositionAction
-  {
-    public int Position { get; set; }
+    public class SetTimeMachinePositionAction
+    {
+      public int Position { get; set; }
+    }
   }
 }

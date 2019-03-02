@@ -17,7 +17,7 @@ namespace Redux.TimeMachine
             .WithActions(previousState.Actions.Take(previousState.Position).ToImmutableList());
       }
 
-      if (action is PauseTimeMachineAction)
+      if (action is TimeMachineActions.PauseTimeMachineAction)
       {
         return previousState
             .WithIsPaused(true);
@@ -30,10 +30,10 @@ namespace Redux.TimeMachine
             .WithIsPaused(true);
       }
 
-      if (action is SetTimeMachinePositionAction)
+      if (action is TimeMachineActions.SetTimeMachinePositionAction)
       {
         return previousState
-            .WithPosition(((SetTimeMachinePositionAction)action).Position)
+            .WithPosition(((TimeMachineActions.SetTimeMachinePositionAction)action).Position)
             .WithIsPaused(true);
       }
 
