@@ -2,15 +2,15 @@
 {
   public class TimeMachineActions
   {
-    internal class UndoAction
+    public class UndoAction
     {
     }
 
-    internal class RedoAction
+    public class RedoAction
     {
     }
 
-    internal class ClearAction
+    public class ClearAction
     {
     }
   }
