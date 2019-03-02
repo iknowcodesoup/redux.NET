@@ -1,17 +1,27 @@
 ﻿namespace Redux.TimeMachine
 {
-    public class PauseTimeMachineAction
+  public class TimeMachineActions
+  {
+    internal class UndoAction
     {
-
     }
 
-    public class ResumeTimeMachineAction
+    internal class RedoAction
     {
-
     }
 
-    public class SetTimeMachinePositionAction
+    internal class ClearAction
     {
-        public int Position { get; set; }
     }
+  }
+
+  public class PauseTimeMachineAction
+  {
+
+  }
+
+  public class SetTimeMachinePositionAction
+  {
+    public int Position { get; set; }
+  }
 }

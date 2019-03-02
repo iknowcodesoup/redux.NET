@@ -1,53 +1,51 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 
 namespace Redux.TimeMachine
 {
-    public class TimeMachineReducer
+  public class TimeMachineReducer
+  {
+    public static TimeMachineState Execute<TState>(TimeMachineState previousState, TState innerState, object action)
     {
-        private Func<object, object, object> _reducer;
+      if (action is TimeMachineActions.RedoAction)
+      {
+        if (previousState.Position < previousState.States.Count)
+          return previousState
+            .WithIsPaused(false)
+            .WithStates(previousState.States.Take(previousState.Position + 1).ToImmutableList())
+            .WithActions(previousState.Actions.Take(previousState.Position).ToImmutableList());
+      }
 
-        public TimeMachineReducer(Func<object, object, object> reducer)
-        {
-            _reducer = reducer;
-        }
+      if (action is PauseTimeMachineAction)
+      {
+        return previousState
+            .WithIsPaused(true);
+      }
 
-        public TimeMachineState Execute(TimeMachineState previousState, object action)
-        {
-            if(action is ResumeTimeMachineAction)
-            {
-                return previousState
-                    .WithIsPaused(false)
-                    .WithStates(previousState.States.Take(previousState.Position + 1).ToImmutableList())
-                    .WithActions(previousState.Actions.Take(previousState.Position).ToImmutableList());
-            }
+      if (action is TimeMachineActions.UndoAction actionTyped)
+      {
+        if (previousState.Position > 0)
+          return previousState.WithPosition(previousState.Position - 1)
+            .WithIsPaused(true);
+      }
 
-            if(action is PauseTimeMachineAction)
-            {
-                return previousState
-                    .WithIsPaused(true);
-            }
+      if (action is SetTimeMachinePositionAction)
+      {
+        return previousState
+            .WithPosition(((SetTimeMachinePositionAction)action).Position)
+            .WithIsPaused(true);
+      }
 
-            if(action is SetTimeMachinePositionAction)
-            {
-                return previousState
-                    .WithPosition(((SetTimeMachinePositionAction)action).Position)
-                    .WithIsPaused(true);
-            }
+      if (previousState.IsPaused)
+      {
+        return previousState;
+      }
 
-            if (previousState.IsPaused)
-            {
-                return previousState;
-            }
-
-            var innerState = _reducer(previousState.States.Last(), action);
-
-            return previousState
-                .WithStates(previousState.States.Add(innerState))
-                .WithActions(previousState.Actions.Add(action))
-                .WithPosition(previousState.Position + 1);
-        }
+      return previousState
+          .WithStates(previousState.States.Add(innerState))
+          .WithActions(previousState.Actions.Add(action))
+          .WithPosition(previousState.Position + 1);
     }
+  }
 }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Reactive-Redux</id>
-    <version>3.0.1</version>
+    <version>3.0.2</version>
     <authors>Jeff Holcombe</authors>
     <owners>Jeff Holcombe</owners>
     <license type="expression">MIT</license>
@@ -18,6 +18,6 @@
     </dependencies>
   </metadata>
   <files>
-	<file src="..\reactive-redux\Reactive-Redux\bin\release\netstandard1.1\Reactive-Redux.dll" target="lib\netstandard1.1" />
+	<file src="..\reactive-redux\Reactive-Redux\bin\release\netstandard2.0\Reactive-Redux.dll" target="lib\netstandard1.1" />
   </files>
 </package>

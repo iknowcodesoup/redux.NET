@@ -16,7 +16,7 @@
   public class Store<TState> : IStore<TState>
   {
     private readonly object _syncRoot = new object();
-    private readonly Dispatcher _dispatcher;
+    protected Dispatcher Dispatcher;
     private readonly Reducer<TState> _reducer;
     private Action _stateChanged;
 
@@ -28,7 +28,7 @@
       params Middleware<TState>[] middlewares)
     {
       _reducer = reducer;
-      _dispatcher = ApplyMiddlewares(middlewares);
+      Dispatcher = ApplyMiddlewares(middlewares);
       CurrentState = initialState;
     }
 
@@ -44,10 +44,10 @@
 
     public object Dispatch(object action)
     {
-      return _dispatcher(action);
+      return Dispatcher(action);
     }
 
-    public Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
+    public virtual Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
     {
       Dispatcher dispatcher = InnerDispatch;
 
