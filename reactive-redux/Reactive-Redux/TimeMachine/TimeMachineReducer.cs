@@ -6,7 +6,7 @@ namespace Redux.TimeMachine
 {
   public class TimeMachineReducer
   {
-    public static TimeMachineState Execute<TState>(TimeMachineState previousState, TState innerState, object action)
+    public static TimeMachineState<TState> Execute<TState>(TimeMachineState<TState> previousState, TState innerState, object action)
     {
       if (action is TimeMachineActions.RedoAction)
       {

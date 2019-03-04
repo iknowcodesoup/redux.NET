@@ -6,7 +6,7 @@
 
   public class TimeMachineMiddleware<TState> : IDisposable where TState : class, new()
   {
-    public static TimeMachineState timeMachineState = new TimeMachineState();
+    public TimeMachineState<TState> timeMachineState = new TimeMachineState<TState>();
 
     public Middleware<TState> CreateMiddleware()
     {
@@ -16,10 +16,14 @@
         {
           var result = next(action);
 
-          if (action.GetType().BaseType == typeof(TimeMachineActions))
+          timeMachineState = TimeMachineReducer.Execute(timeMachineState, store.CurrentState, action);
+
+          switch (action)
           {
-            timeMachineState = TimeMachineReducer.Execute(timeMachineState, result, action);
-            result = timeMachineState.States[timeMachineState.Position];
+            case TimeMachineActions.UndoAction _:
+            case TimeMachineActions.RedoAction _:
+              store.ReplaceState(timeMachineState.States[timeMachineState.Position - 1]);
+              break;
           }
 
           return result;

@@ -11,6 +11,8 @@
     event Action StateChanged;
 
     object InnerDispatch(object action);
+
+    void ReplaceState(TState replacedState);
   }
 
   public class Store<TState> : IStore<TState>
@@ -47,7 +49,7 @@
       return Dispatcher(action);
     }
 
-    public virtual Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
+    protected virtual Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
     {
       Dispatcher dispatcher = InnerDispatch;
 
@@ -69,6 +71,16 @@
       _stateChanged?.Invoke();
 
       return action;
+    }
+
+    public void ReplaceState(TState replacedState)
+    {
+      lock (_syncRoot)
+      {
+        CurrentState = replacedState;
+      }
+
+      _stateChanged?.Invoke();
     }
   }
 }

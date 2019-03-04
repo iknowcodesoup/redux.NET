@@ -2,11 +2,11 @@
 
 namespace Redux.TimeMachine
 {
-  public class TimeMachineState
+  public class TimeMachineState<TState>
   {
     public ImmutableList<object> Actions { get; private set; }
 
-    public ImmutableList<object> States { get; private set; }
+    public ImmutableList<TState> States { get; private set; }
 
     public int Position { get; private set; }
 
@@ -15,15 +15,15 @@ namespace Redux.TimeMachine
     public TimeMachineState()
     {
       Actions = ImmutableList<object>.Empty;
-      States = ImmutableList<object>.Empty;
+      States = ImmutableList<TState>.Empty;
     }
 
-    public TimeMachineState(object initialState) : this()
+    public TimeMachineState(TState initialState) : this()
     {
       States = States.Add(initialState);
     }
 
-    public TimeMachineState(TimeMachineState other)
+    public TimeMachineState(TimeMachineState<TState> other)
     {
       Actions = other.Actions;
       States = other.States;
@@ -31,24 +31,24 @@ namespace Redux.TimeMachine
       IsPaused = other.IsPaused;
     }
 
-    public TimeMachineState WithPosition(int position)
+    public TimeMachineState<TState> WithPosition(int position)
     {
-      return new TimeMachineState(this) { Position = position };
+      return new TimeMachineState<TState>(this) { Position = position };
     }
 
-    public TimeMachineState WithIsPaused(bool isPaused)
+    public TimeMachineState<TState> WithIsPaused(bool isPaused)
     {
-      return new TimeMachineState(this) { IsPaused = isPaused };
+      return new TimeMachineState<TState>(this) { IsPaused = isPaused };
     }
 
-    public TimeMachineState WithStates(ImmutableList<object> states)
+    public TimeMachineState<TState> WithStates(ImmutableList<TState> states)
     {
-      return new TimeMachineState(this) { States = states };
+      return new TimeMachineState<TState>(this) { States = states };
     }
 
-    public TimeMachineState WithActions(ImmutableList<object> actions)
+    public TimeMachineState<TState> WithActions(ImmutableList<object> actions)
     {
-      return new TimeMachineState(this) { Actions = actions };
+      return new TimeMachineState<TState>(this) { Actions = actions };
     }
   }
 }
