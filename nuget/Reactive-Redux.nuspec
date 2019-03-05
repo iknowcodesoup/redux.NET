@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Reactive-Redux</id>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
     <authors>Jeff Holcombe</authors>
     <owners>Jeff Holcombe</owners>
     <license type="expression">MIT</license>
@@ -14,10 +14,10 @@
     <tags>Redux Reactive Immutable State Flux History Undo Redo</tags>
     <dependencies>
 	  <dependency id="System.Collections.Immutable" version="1.5.0" />
-	  <dependency id="System.Reactive" version="4.0.0" />
+	  <dependency id="System.Reactive" version="4.1.3" />
     </dependencies>
   </metadata>
   <files>
-	<file src="..\reactive-redux\Reactive-Redux\bin\release\netstandard2.0\Reactive-Redux.dll" target="lib\netstandard1.1" />
+	<file src="..\reactive-redux\Reactive-Redux\bin\release\netstandard2.0\Reactive-Redux.dll" target="lib\netstandard2.0" />
   </files>
 </package>
