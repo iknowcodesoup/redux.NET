@@ -6,12 +6,12 @@ namespace Redux.TimeMachine
   {
     public class UndoAction
     {
-      Type TypeToFind { get; set; }
+      public Type TypeToFind { get; set; }
     }
 
     public class RedoAction
     {
-      Type TypeToFind { get; set; }
+      public Type TypeToFind { get; set; }
     }
 
     public class ClearAction

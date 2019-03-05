@@ -1,12 +1,13 @@
-﻿namespace BurnCalc.State.Middleware
+﻿namespace Redux.TimeMachine
 {
   using Redux;
-  using Redux.TimeMachine;
   using System;
+  using System.Collections.Generic;
+  using System.Collections.Immutable;
 
   public class TimeMachineMiddleware<TState> : IDisposable where TState : class, new()
   {
-    public TimeMachineState<TState> timeMachineState = new TimeMachineState<TState>();
+    private TimeMachineState<TState> timeMachineState = new TimeMachineState<TState>();
 
     public Middleware<TState> CreateMiddleware()
     {
@@ -22,7 +23,10 @@
           {
             case TimeMachineActions.UndoAction _:
             case TimeMachineActions.RedoAction _:
-              store.ReplaceState(timeMachineState.States[timeMachineState.Position - 1]);
+              store.ReplaceState(timeMachineState.States[timeMachineState.Position]);
+              break;
+            case TimeMachineActions.ClearAction _:
+              ClearState(store.CurrentState);
               break;
           }
 
@@ -31,10 +35,12 @@
       };
     }
 
-    private void ClearState()
+    private void ClearState(TState currentState)
     {
-      timeMachineState.States.Clear();
-      timeMachineState.Actions.Clear();
+      timeMachineState
+        .WithActions(new List<object>().ToImmutableList())
+        .WithStates(new List<TState>() { currentState }.ToImmutableList())
+        .WithPosition(1);
     }
 
     private bool disposedValue = false;
@@ -45,7 +51,7 @@
       {
         if (disposing)
         {
-          ClearState();
+          ClearState(null);
         }
 
         disposedValue = true;
