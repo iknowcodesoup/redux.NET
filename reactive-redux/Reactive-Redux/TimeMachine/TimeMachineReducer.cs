@@ -62,6 +62,14 @@
       //      .WithPosition(((TimeMachineActions.SetTimeMachinePositionAction)action).Position)
       //      .WithIsPaused(true);
       //}
+      
+      if(action is TimeMachineActions.ClearAction)
+      {
+        return previousState
+          .WithActions(new List<object>() { "Initial_State" }.ToImmutableList())
+          .WithStates(new List<TState>() { innerState }.ToImmutableList())
+          .WithPosition(0);
+      }
 
       if (previousState.IsPaused)
       {
