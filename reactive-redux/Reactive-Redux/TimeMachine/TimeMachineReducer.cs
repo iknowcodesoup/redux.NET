@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace Redux.TimeMachine
 {
@@ -52,8 +53,18 @@ namespace Redux.TimeMachine
       }
 
       if (!action.GetType().FullName.Contains("TimeMachineActions"))
+      {
+        var previousStates = previousState.States.Take(previousState.Position).ToList();
+        previousStates.Add(innerState);
+
+        var previousActions = previousState.Actions.Take(previousState.Position).ToList();
+        previousActions.Add(action);
+
         previousState = previousState
+          .WithActions(previousActions.ToImmutableList())
+          .WithStates(previousStates.ToImmutableList())
           .WithIsPaused(false);
+      }
 
       if (previousState.IsPaused)
         return previousState;

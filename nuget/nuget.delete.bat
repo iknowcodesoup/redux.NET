@@ -1,1 +1,1 @@
-nuget delete Reactive-Redux 3.0.3 -source c:\nuget\repo
+nuget delete Reactive-Redux 3.1.1 -source c:\nuget\repo
