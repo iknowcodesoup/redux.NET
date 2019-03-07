@@ -17,15 +17,5 @@ namespace Redux.TimeMachine
     public class ClearAction
     {
     }
-
-    public class PauseTimeMachineAction
-    {
-
-    }
-
-    public class SetTimeMachinePositionAction
-    {
-      public int Position { get; set; }
-    }
   }
 }

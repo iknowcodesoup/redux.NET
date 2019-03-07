@@ -58,13 +58,6 @@ namespace Redux.TimeMachine
       if (previousState.IsPaused)
         return previousState;
 
-      //if (previousState.Position < previousState.States.Count - 1)
-      //{
-      //  previousState = previousState
-      //    .WithStates(previousState.States.Take(previousState.Position).ToImmutableList())
-      //    .WithActions(previousState.Actions.Take(previousState.Position).ToImmutableList());
-      //}
-
       return previousState
           .WithStates(previousState.States.Add(innerState))
           .WithActions(previousState.Actions.Add(action))

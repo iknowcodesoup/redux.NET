@@ -49,7 +49,7 @@
       return Dispatcher(action);
     }
 
-    protected virtual Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
+    protected Dispatcher ApplyMiddlewares(params Middleware<TState>[] middlewares)
     {
       Dispatcher dispatcher = InnerDispatch;
 
