@@ -18,7 +18,7 @@ namespace Redux.TimeMachine
           .GetRange(trimPosition, previousState.Actions.Count - previousState.Position)
           .FindIndex(x => x.GetType() == redoAction.TypeToFind);
 
-        var filteredPosition = nextPosition == -1 ? previousState.Position : nextPosition;
+        var filteredPosition = nextPosition == -1 ? previousState.States.Count - 1 : nextPosition;
 
         return previousState
           .WithPosition(nextPosition)
@@ -36,7 +36,7 @@ namespace Redux.TimeMachine
           .GetRange(0, trimPosition)
           .FindLastIndex(x => x.GetType() == undoAction.TypeToFind);
 
-        var filteredPosition = nextPosition == -1 ? previousState.Position : nextPosition;
+        var filteredPosition = nextPosition == -1 ? 0 : nextPosition;
 
         return previousState
           .WithPosition(nextPosition)
