@@ -1,8 +1,9 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 
 namespace Redux.TimeMachine
 {
-  public class TimeMachineState<TState>
+  public class TimeMachineState<TState> : IDisposable
   {
     public ImmutableList<object> Actions { get; private set; }
 
@@ -31,6 +32,14 @@ namespace Redux.TimeMachine
       IsPaused = other.IsPaused;
     }
 
+    public void Clear()
+    {
+      Actions.Clear();
+      States.Clear();
+      Position = 0;
+      IsPaused = false;
+    }
+
     public TimeMachineState<TState> WithPosition(int position)
     {
       return new TimeMachineState<TState>(this) { Position = position };
@@ -49,6 +58,26 @@ namespace Redux.TimeMachine
     public TimeMachineState<TState> WithActions(ImmutableList<object> actions)
     {
       return new TimeMachineState<TState>(this) { Actions = actions };
+    }
+
+    private bool disposedValue = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (!disposedValue)
+      {
+        if (disposing)
+        {
+          Clear();
+        }
+
+        disposedValue = true;
+      }
+    }
+
+    public void Dispose()
+    {
+      Dispose(true);
     }
   }
 }

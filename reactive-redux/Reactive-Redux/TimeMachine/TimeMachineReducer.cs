@@ -1,4 +1,7 @@
-﻿namespace Redux.TimeMachine
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+
+namespace Redux.TimeMachine
 {
   public class TimeMachineReducer
   {
@@ -9,21 +12,16 @@
         if (previousState.Position >= previousState.States.Count - 1)
           return previousState;
 
-        //var previousIndex = previousState.Position;
-        //object previousAction;
+        var trimPosition = previousState.Position + 1;
 
-        //do
-        //{
-        //  previousAction = previousState.Actions[previousIndex++];
-        //} while (previousState.Position < previousState.States.Count - 1 && redoAction.TypeToFind.GetType() != previousAction.GetType());
+        var nextPosition = previousState.Actions
+          .GetRange(trimPosition, previousState.Actions.Count - previousState.Position)
+          .FindIndex(x => x.GetType() == redoAction.TypeToFind);
 
-        //var foundPrevious = previousAction.GetType() == redoAction.TypeToFind.GetType();
-
-        //if (!foundPrevious)
-        //  return previousState;
+        var filteredPosition = nextPosition == -1 ? previousState.Position : nextPosition;
 
         return previousState
-          .WithPosition(previousState.Position + 1)
+          .WithPosition(nextPosition)
           .WithIsPaused(true);
       }
 
@@ -32,41 +30,33 @@
         if (previousState.Position == 0)
           return previousState;
 
-        //var previousIndex = previousState.Position;
-        //object previousAction;
+        var trimPosition = previousState.Position - 1;
 
-        //do
-        //{
-        //  previousAction = previousState.Actions[previousIndex--];
-        //} while (previousIndex >= 0 && undoAction.TypeToFind.GetType() != previousAction.GetType());
+        var nextPosition = previousState.Actions
+          .GetRange(0, trimPosition)
+          .FindLastIndex(x => x.GetType() == undoAction.TypeToFind);
 
-        //var foundPrevious = previousAction.GetType() == undoAction.TypeToFind.GetType();
-
-        //if (!foundPrevious)
-        //  return previousState;
+        var filteredPosition = nextPosition == -1 ? previousState.Position : nextPosition;
 
         return previousState
-          .WithPosition(previousState.Position - 1)
+          .WithPosition(nextPosition)
           .WithIsPaused(true);
       }
 
-      //if (action is TimeMachineActions.PauseTimeMachineAction)
-      //{
-      //  return previousState
-      //      .WithIsPaused(true);
-      //}
+      if (action is TimeMachineActions.ClearAction)
+      {
+        return previousState
+          .WithActions(new List<object>().ToImmutableList())
+          .WithStates(new List<TState>() { innerState }.ToImmutableList())
+          .WithPosition(0);
+      }
 
-      //if (action is TimeMachineActions.SetTimeMachinePositionAction)
-      //{
-      //  return previousState
-      //      .WithPosition(((TimeMachineActions.SetTimeMachinePositionAction)action).Position)
-      //      .WithIsPaused(true);
-      //}
+      if (action.GetType().FullName.Contains("TimeMachineActions"))
+        previousState = previousState
+          .WithIsPaused(false);
 
       if (previousState.IsPaused)
-      {
         return previousState;
-      }
 
       //if (previousState.Position < previousState.States.Count - 1)
       //{

@@ -2,8 +2,6 @@
 {
   using Redux;
   using System;
-  using System.Collections.Generic;
-  using System.Collections.Immutable;
 
   public class TimeMachineMiddleware<TState> : IDisposable where TState : class, new()
   {
@@ -25,22 +23,11 @@
             case TimeMachineActions.RedoAction _:
               store.ReplaceState(timeMachineState.States[timeMachineState.Position]);
               break;
-            case TimeMachineActions.ClearAction _:
-              ClearState(store.CurrentState);
-              break;
           }
 
           return result;
         };
       };
-    }
-
-    private void ClearState(TState currentState)
-    {
-      timeMachineState
-        .WithActions(new List<object>().ToImmutableList())
-        .WithStates(new List<TState>() { currentState }.ToImmutableList())
-        .WithPosition(1);
     }
 
     private bool disposedValue = false;
@@ -51,7 +38,7 @@
       {
         if (disposing)
         {
-          ClearState(null);
+          timeMachineState.Dispose();
         }
 
         disposedValue = true;
