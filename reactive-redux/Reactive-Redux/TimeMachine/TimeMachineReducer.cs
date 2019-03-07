@@ -54,15 +54,16 @@ namespace Redux.TimeMachine
 
       if (!action.GetType().FullName.Contains("TimeMachineActions"))
       {
-        var previousStates = previousState.States.Take(previousState.Position).ToList();
-        previousStates.Add(innerState);
-
         var previousActions = previousState.Actions.Take(previousState.Position).ToList();
         previousActions.Add(action);
+
+        var previousStates = previousState.States.Take(previousState.Position).ToList();
+        previousStates.Add(innerState);
 
         previousState = previousState
           .WithActions(previousActions.ToImmutableList())
           .WithStates(previousStates.ToImmutableList())
+          .WithPosition(previousActions.Count - 1)
           .WithIsPaused(false);
       }
 
