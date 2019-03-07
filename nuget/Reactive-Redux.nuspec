@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Reactive-Redux</id>
-    <version>3.0.3</version>
+    <version>3.1</version>
     <authors>Jeff Holcombe</authors>
     <owners>Jeff Holcombe</owners>
     <license type="expression">MIT</license>
