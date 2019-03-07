@@ -15,13 +15,13 @@ namespace Redux.TimeMachine
         var trimPosition = previousState.Position + 1;
 
         var nextPosition = previousState.Actions
-          .GetRange(trimPosition, previousState.Actions.Count - previousState.Position)
+          .GetRange(trimPosition, (previousState.Actions.Count - 1) - previousState.Position)
           .FindIndex(x => x.GetType() == redoAction.TypeToFind);
 
         var filteredPosition = nextPosition == -1 ? previousState.States.Count - 1 : nextPosition;
 
         return previousState
-          .WithPosition(nextPosition)
+          .WithPosition(filteredPosition)
           .WithIsPaused(true);
       }
 
@@ -39,19 +39,19 @@ namespace Redux.TimeMachine
         var filteredPosition = nextPosition == -1 ? 0 : nextPosition;
 
         return previousState
-          .WithPosition(nextPosition)
+          .WithPosition(filteredPosition)
           .WithIsPaused(true);
       }
 
       if (action is TimeMachineActions.ClearAction)
       {
         return previousState
-          .WithActions(new List<object>().ToImmutableList())
+          .WithActions(new List<object>() { previousState.Actions[previousState.Actions.Count - 1] }.ToImmutableList())
           .WithStates(new List<TState>() { innerState }.ToImmutableList())
           .WithPosition(0);
       }
 
-      if (action.GetType().FullName.Contains("TimeMachineActions"))
+      if (!action.GetType().FullName.Contains("TimeMachineActions"))
         previousState = previousState
           .WithIsPaused(false);
 
