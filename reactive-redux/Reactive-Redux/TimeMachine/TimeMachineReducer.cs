@@ -15,10 +15,12 @@ namespace Redux.TimeMachine
         var trimPosition = previousState.Position + 1;
 
         var nextPosition = previousState.Actions
-          .GetRange(trimPosition, (previousState.Actions.Count - 1) - previousState.Position)
+          .GetRange(trimPosition, previousState.Actions.Count - trimPosition)
           .FindIndex(x => x.GetType() == redoAction.TypeToFind);
 
-        var filteredPosition = nextPosition == -1 ? previousState.States.Count - 1 : nextPosition;
+        var filteredPosition = nextPosition == -1
+          ? previousState.States.Count - 1
+          : nextPosition + trimPosition;
 
         return previousState
           .WithPosition(filteredPosition)
@@ -29,11 +31,9 @@ namespace Redux.TimeMachine
       {
         if (previousState.Position == 0)
           return previousState;
-
-        var trimPosition = previousState.Position - 1;
-
+          
         var nextPosition = previousState.Actions
-          .GetRange(0, trimPosition)
+          .GetRange(0, previousState.Position)
           .FindLastIndex(x => x.GetType() == undoAction.TypeToFind);
 
         var filteredPosition = nextPosition == -1 ? 0 : nextPosition;
