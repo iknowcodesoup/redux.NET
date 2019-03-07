@@ -32,7 +32,7 @@ namespace Redux.TimeMachine
       {
         if (previousState.Position == 0)
           return previousState;
-          
+
         var nextPosition = previousState.Actions
           .GetRange(0, previousState.Position)
           .FindLastIndex(x => x.GetType() == undoAction.TypeToFind);
@@ -52,29 +52,19 @@ namespace Redux.TimeMachine
           .WithPosition(0);
       }
 
+      if (previousState.IsPaused && !action.GetType().FullName.Contains("TimeMachineActions"))
+        previousState = previousState
+          .WithActions(previousState.Actions.Take(previousState.Position + 1).ToImmutableList())
+          .WithStates(previousState.States.Take(previousState.Position + 1).ToImmutableList())
+          .WithPosition(previousState.Position)
+          .WithIsPaused(false);
+
       if (previousState.IsPaused)
-      {
-        if (!action.GetType().FullName.Contains("TimeMachineActions"))
-        {
-          var previousActions = previousState.Actions.Take(previousState.Position).ToList();
-          previousActions.Add(action);
-
-          var previousStates = previousState.States.Take(previousState.Position).ToList();
-          previousStates.Add(innerState);
-
-          return previousState
-            .WithActions(previousActions.ToImmutableList())
-            .WithStates(previousStates.ToImmutableList())
-            .WithPosition(previousActions.Count - 1)
-            .WithIsPaused(false);
-        }
-
         return previousState;
-      }
 
       return previousState
-          .WithStates(previousState.States.Add(innerState))
           .WithActions(previousState.Actions.Add(action))
+          .WithStates(previousState.States.Add(innerState))
           .WithPosition(previousState.Position + 1);
     }
   }
