@@ -52,23 +52,25 @@ namespace Redux.TimeMachine
           .WithPosition(0);
       }
 
-      if (!action.GetType().FullName.Contains("TimeMachineActions"))
-      {
-        var previousActions = previousState.Actions.Take(previousState.Position).ToList();
-        previousActions.Add(action);
-
-        var previousStates = previousState.States.Take(previousState.Position).ToList();
-        previousStates.Add(innerState);
-
-        previousState = previousState
-          .WithActions(previousActions.ToImmutableList())
-          .WithStates(previousStates.ToImmutableList())
-          .WithPosition(previousActions.Count - 1)
-          .WithIsPaused(false);
-      }
-
       if (previousState.IsPaused)
+      {
+        if (!action.GetType().FullName.Contains("TimeMachineActions"))
+        {
+          var previousActions = previousState.Actions.Take(previousState.Position).ToList();
+          previousActions.Add(action);
+
+          var previousStates = previousState.States.Take(previousState.Position).ToList();
+          previousStates.Add(innerState);
+
+          return previousState
+            .WithActions(previousActions.ToImmutableList())
+            .WithStates(previousStates.ToImmutableList())
+            .WithPosition(previousActions.Count - 1)
+            .WithIsPaused(false);
+        }
+
         return previousState;
+      }
 
       return previousState
           .WithStates(previousState.States.Add(innerState))
